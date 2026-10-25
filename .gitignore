@@ -1,0 +1,22 @@
+# Builds
+*.elf
+*.prx
+EBOOT.PBP
+PARAM.SFO
+*.o
+*.a
+build/
+dist/
+
+# No subir assets/binarios de MCPSP ni de Mojang
+MCPSP/
+*.zip
+data/images/
+data/sound/
+*.bin
+*.pvr
+
+# IDE
+.vscode/
+.idea/
+*.user

@@ -1,0 +1,7 @@
+# Anadir en OBJS (junto a platform/path.o):
+#	src/platform/net_adhoc.o \
+
+# Anadir en LIBS:
+#	-lpspnet -lpspnet_adhoc -lpspnet_adhocctl
+
+# Opcional CI sin hardware: -DMCPSP_ADHOC_STUB en CFLAGS

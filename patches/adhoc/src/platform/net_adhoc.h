@@ -50,4 +50,40 @@ void adhocStop(AdhocSession* s);
 int  adhocJoinSelected(AdhocSession* s);
 const char* adhocStateLabel(const AdhocSession* s);
 
+/* ---- Fase 2: transporte de datos entre peers (usado por world_sync) ---- */
+
+/* Manda `data` (len bytes) a un peer especifico. Devuelve bytes enviados
+ * o <0 si fallo. No bloqueante. */
+int adhocSendTo(AdhocSession* s, const AdhocPeer* peer, const void* data, int len);
+
+/* Manda `data` a todos los peers validos de la sesion (el host lo usa
+ * para difundir cambios de mundo a todos los clientes). Devuelve cuantos
+ * peers recibieron el envio exitosamente. */
+int adhocBroadcast(AdhocSession* s, const void* data, int len);
+
+/* Revisa si llego un paquete (no bloqueante). Si llego, lo copia a `buf`
+ * (hasta bufLen bytes) y llena `outPeer` con el remitente (si no es NULL).
+ * Devuelve bytes recibidos, o <0 si no hay nada pendiente este frame. */
+int adhocRecv(AdhocSession* s, AdhocPeer* outPeer, void* buf, int bufLen);
+
 #endif
+
+/* ===== Fase 2: Sincronización de Mundo ===== */
+
+typedef struct {
+    uint8_t type;
+    uint16_t len;
+    uint32_t timestamp;
+    uint8_t data[512];
+} AdhocMessage;
+
+/* Enviar cambios de bloques a peers */
+int adhocSendBlockChange(int x, int y, int z, uint8_t blockType);
+
+/* Enviar posición del jugador */
+int adhocSendPlayerPos(float x, float y, float z, float yaw, float pitch);
+
+/* Procesar mensajes recibidos */
+int adhocPollMessage(AdhocMessage* outMsg);
+void adhocProcessMessage(const AdhocMessage* msg);
+
